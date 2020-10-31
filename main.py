@@ -4,8 +4,11 @@ import shutil
 import time
 import sys, getopt
 file="tasks.db"
+
+
 ## check the system in use to clean the screen
 OS = platform.system()
+
 
 def CleanScreen():
     ## clean the screen
@@ -26,14 +29,19 @@ def MakeHeaders(Msg, Char):
     Total_Char = width - (Msg_len + 2)
     return str(Char * int(Total_Char/2) + " " + Msg + " " + Char * int(Total_Char/2))
 
+
 def MakeLines(Char):
     terminal = shutil.get_terminal_size()
     width = terminal.columns
     return str(Char * int(width))
+
+
 def MakeMenuHeader(Menu, char):
     CleanScreen()
     print(MakeHeaders(str(Menu),str(char)))
     print(MakeLines(str(char)))
+
+
 def MainMenu():
     MakeMenuHeader("Get things DONE!","*")
     print("1- Add a task")
@@ -43,6 +51,7 @@ def MainMenu():
     print(MakeLines("-"))
     opt=input("Choose an option: ")
     return opt 
+
 
 def ListTasks(CMD):
     f = open(file,"r")
@@ -56,17 +65,9 @@ def ListTasks(CMD):
             print(str(x) + " - " + FileSplitted[x])
         if not CMD == True:
             input("Hit enter to exit to main menu")
-#    MakeMenuHeader("List tasks","-")
-#    try:
-#        db = open(file,"r")
-#        tasks = db.read()
-#        print(tasks)
-#    except FileNotFoundError:
-#        print("No file found, check for "+ file)
 
-#def WriteTask(task,date):
+
 def WriteTask(task):
-
     try:
         db = open(file,"a+")
         task = task + "\n"
@@ -74,7 +75,9 @@ def WriteTask(task):
         print("Saved!")
         db.close
     except (IOError, FileNotFoundError) as e:
-        print("Failed to write to the file "+ file)
+        print(f"Failed to write to the file {file}")
+        raise e
+
 
 def AddTask():
     MakeMenuHeader("Add tasks","-")
@@ -102,20 +105,20 @@ def RemoveTasks():
             print(str(x) + " - " + FileSplitted[x])
         ret=int(input("Wich one do you want to remove? [numbers]: "))
         if ret > (len(FileSplitted)-2):
-            print("Choose a number from 0 to "+ str(len(FileSplitted)-2))
+            print(f"Choose a number from 0 to {len(FileSplitted)-2}")
         else:
             try:
                 # cleanup the file
                 with open(file, 'w'): pass
                 FileSplitted.pop(ret)
-                #print(FileSplitted)
                 f=open(file, 'w')
                 for x in range(len(FileSplitted)-1):
                     f.write(FileSplitted[x] + "\n")
                 f.close()
-                print("task "+ str(ret) +" removed")
+                print(f"task {ret} removed")
             except ValueError:
                 print("Only numbers are accepted")
+
 
 def ScreenManual():
     while True:
@@ -136,6 +139,8 @@ def ScreenManual():
            print("Invalid Option, try again")
    
        time.sleep(1)
+
+
 def ShowHelp():
        MakeMenuHeader("Help!","*")
        print("The following options are available in the command line mode: \n -t or --task  : adds a task using the argument as a name \
@@ -148,6 +153,8 @@ def ShowHelp():
              " + sys.argv[0] + " -t Task1 -d 07-30-18\n\n\
              IMPORTANT:\n\
              if you whant to use this program in a screen mode, just use it without arguments! ;)")
+
+
 def WithArgs():
     try:
        opts, args = getopt.getopt(sys.argv[1:],"d:hlt:",["task=","date=","help","list"])
