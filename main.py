@@ -20,12 +20,9 @@ def CleanScreen():
 
 def MakeHeaders(Msg, Char):
     import shutil
-    #get terminal width
-    #terminal = os.get_terminal_size()
     terminal = shutil.get_terminal_size()
     width = terminal.columns
     Msg_len = len(Msg)
-    #Char = "*"
     Total_Char = width - (Msg_len + 2)
     return str(Char * int(Total_Char/2) + " " + Msg + " " + Char * int(Total_Char/2))
 
@@ -83,12 +80,10 @@ def AddTask():
     MakeMenuHeader("Add tasks","-")
     task = str(input("Type a task to be added to the list: "))
     date = str(input("Type a deadline date mm-dd-yy: "))
-    #print("Task: {} Until: {}.".format(task,date) )
     print("Task: {}.".format(task) )
 
     ret = str(input("Is this task right? (y/n): "))
     if ret in ('y','Y','yes','Yes','YES'):
-        #WriteTask(task,date)
         WriteTask(task)
 
 
