@@ -6,12 +6,12 @@ import sys, getopt
 file="tasks.db"
 
 
-## check the system in use to clean the screen
+# check the system in use to clean the screen
 OS = platform.system()
 
 
 def CleanScreen():
-    ## clean the screen
+    # clean the screen
     if OS == "Windows":
         os.system('cls')
     else:
@@ -41,20 +41,15 @@ def MakeMenuHeader(Menu, char):
 
 def MainMenu():
     MakeMenuHeader("Get things DONE!","*")
-    print("1- Add a task")
-    print("2- Delete a task")
-    print("3- List task")
-    print("q- Quit")
+    print(" 1- Add a task\n 2- Delete a task\n 3- List task\n q- Quit")
     print(MakeLines("-"))
     opt=input("Choose an option: ")
     return opt 
 
 
 def ListTasks(CMD):
-    f = open(file,"r")
-    j = f.read()
-    f.close()
-    FileSplitted = j.split('\n')
+    with open(file, "r") as f:
+        FileSplitted = f.read_lines()
     if (len(FileSplitted)-1) == 0:
         print("Nice! you have no tasks to do!")
     else:
@@ -67,10 +62,9 @@ def ListTasks(CMD):
 def WriteTask(task):
     try:
         db = open(file,"a+")
-        task = task + "\n"
-        db.write(task)
+        with open(file,"a+") as db:
+            db.write(task)
         print("Saved!")
-        db.close
     except (IOError, FileNotFoundError) as e:
         print(f"Failed to write to the file {file}")
         raise e
