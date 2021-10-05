@@ -49,8 +49,8 @@ def MainMenu():
 
 def ListTasks(CMD):
     with open(file, "r") as f:
-        FileSplitted = f.read_lines()
-    if (len(FileSplitted)-1) == 0:
+        FileSplitted = f.readlines()
+    if (len(FileSplitted) -1) == 0:
         print("Nice! you have no tasks to do!")
     else:
         for x in range(len(FileSplitted)-1):
@@ -61,7 +61,6 @@ def ListTasks(CMD):
 
 def WriteTask(task):
     try:
-        db = open(file,"a+")
         with open(file,"a+") as db:
             db.write(task)
         print("Saved!")
@@ -74,7 +73,7 @@ def AddTask():
     MakeMenuHeader("Add tasks","-")
     task = str(input("Type a task to be added to the list: "))
     date = str(input("Type a deadline date mm-dd-yy: "))
-    print("Task: {}.".format(task) )
+    print(f"Task: {task}")
 
     ret = str(input("Is this task right? (y/n): "))
     if ret in ('y','Y','yes','Yes','YES'):
@@ -83,11 +82,9 @@ def AddTask():
 
 def RemoveTasks():
     MakeMenuHeader("Remove a task","-")
-    f = open(file,"r")
-    j = f.read()
-    f.close()
-    FileSplitted = j.split('\n')
-    if (len(FileSplitted)-1) == 0:
+    with open(file,"r") as f:
+        FileSplitted = f.readlines()
+    if (len(FileSplitted) -1) == 0:
         print("Nice! you have no tasks to do!")
     else:
         for x in range(len(FileSplitted)-1):
@@ -100,10 +97,9 @@ def RemoveTasks():
                 # cleanup the file
                 with open(file, 'w'): pass
                 FileSplitted.pop(ret)
-                f=open(file, 'w')
-                for x in range(len(FileSplitted)-1):
-                    f.write(FileSplitted[x] + "\n")
-                f.close()
+                with open(file, 'w') as f:
+                    for x in range(len(FileSplitted)-1):
+                        f.write(FileSplitted[x])
                 print(f"task {ret} removed")
             except ValueError:
                 print("Only numbers are accepted")
